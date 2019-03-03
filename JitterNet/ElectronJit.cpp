@@ -1,18 +1,24 @@
 ﻿#include "stdafx.h"
 #include "ElectronJit.h"
 #include "debugUtils.h"
+#include <cassert>
 
 static BYTE returns11[] = { 0xB8, 0x0A, 0x00, 0x00, 0x00, 0xC3 }; // MOV EAX, 10 then RET
+
+const GUID version =
+{ /* d609bed1-7831-49fc-bd49-b6f054dd4d46 */
+	0xd609bed1,
+	0x7831,
+	0x49fc,
+	{0xbd, 0x49, 0xb6, 0xf0, 0x54, 0xdd, 0x4d, 0x46}
+};
+
+getJitEx g_getJitEx;
+jitStartupEx g_jitStartupEx;
 
 ElectronJit::ElectronJit()
 {
 	LOG_C;
-
-	if (!g_getJitEx)
-	{
-		g_getJitEx = (getJitEx)GetProcAddress(LoadLibraryW(L"r_clrjit.dll"), "getJit");
-		g_jitStartupEx = (jitStartupEx)GetProcAddress(LoadLibraryW(L"r_clrjit.dll"), "jitStartup");
-	}
 
 	p_jit = nullptr;
 }
@@ -53,5 +59,6 @@ BOOL ElectronJit::isCacheCleanupRequired()
 void ElectronJit::getVersionIdentifier(GUID* versionIdentifier)
 {
 	LOG_C;
-	p_jit->getVersionIdentifier(versionIdentifier);
+	assert(versionIdentifier);
+	memcpy(versionIdentifier, &version, sizeof(GUID));
 }

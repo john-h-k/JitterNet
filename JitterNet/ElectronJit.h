@@ -4,8 +4,8 @@
 extern "C" typedef ICorJitCompiler* (__stdcall *getJitEx)();
 extern "C" typedef void (__stdcall *jitStartupEx)(ICorJitHost*);
 
-extern "C" getJitEx g_getJitEx;
-extern "C" jitStartupEx g_jitStartupEx;
+extern getJitEx g_getJitEx;
+extern jitStartupEx g_jitStartupEx;
 
 class ElectronJit : public ICorJitCompiler  // NOLINT(hicpp-special-member-functions)
 {
