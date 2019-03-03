@@ -16,13 +16,6 @@ const GUID version =
 getJitEx g_getJitEx;
 jitStartupEx g_jitStartupEx;
 
-ElectronJit::ElectronJit()
-{
-	LOG_C;
-
-	p_jit = nullptr;
-}
-
 CorJitResult ElectronJit::compileMethod(ICorJitInfo* comp, CORINFO_METHOD_INFO* info, unsigned flags,
 	BYTE** nativeEntry, ULONG* nativeSizeOfCode)
 {
@@ -30,7 +23,7 @@ CorJitResult ElectronJit::compileMethod(ICorJitInfo* comp, CORINFO_METHOD_INFO* 
 
 	const auto name = comp->getMethodNameFromMetadata(info->ftn, nullptr, nullptr, nullptr);
 
-	if (strcmp(name, "Main") == 0)
+	if (strcmp(name, "Main") == 0) // this is wrong, I know
 	{
 		void *codeBlock, *dummyCold, *dummyRoData;
 
@@ -61,4 +54,19 @@ void ElectronJit::getVersionIdentifier(GUID* versionIdentifier)
 	LOG_C;
 	assert(versionIdentifier);
 	memcpy(versionIdentifier, &version, sizeof(GUID));
+}
+
+void ElectronJit::ProcessShutdownWork(ICorStaticInfo* info)
+{
+	p_jit->ProcessShutdownWork(info);
+}
+
+unsigned ElectronJit::getMaxIntrinsicSIMDVectorLength(CORJIT_FLAGS cpuCompileFlags)
+{
+	return p_jit->getMaxIntrinsicSIMDVectorLength(cpuCompileFlags);
+}
+
+void ElectronJit::setRealJit(ICorJitCompiler* realJitCompiler)
+{
+	p_jit->setRealJit(realJitCompiler);
 }

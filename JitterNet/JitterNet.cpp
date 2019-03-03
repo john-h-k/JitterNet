@@ -13,7 +13,7 @@ static ElectronJit* jit;
 
 extern "C" __declspec(dllexport) ICorJitCompiler* __stdcall getJit()
 {
-	LOG_C;
+	LogEnteredFuncDebug(__func__);
 
 	jit = new ElectronJit();
 	jit->p_jit = g_getJitEx();
