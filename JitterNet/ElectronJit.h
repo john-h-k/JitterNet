@@ -18,7 +18,7 @@ public:
 	BOOL isCacheCleanupRequired();
 	void getVersionIdentifier(GUID* versionIdentifier);
 
-	void ProcessShutdownWork(ICorStaticInfo* info);
+	void ProcessShutdownWork(ICorStaticInfo* info) override;
 	unsigned getMaxIntrinsicSIMDVectorLength(CORJIT_FLAGS cpuCompileFlags);
 	void setRealJit(ICorJitCompiler* realJitCompiler);
 	ICorJitCompiler* p_jit;	
