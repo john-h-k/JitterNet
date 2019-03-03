@@ -15,6 +15,12 @@ extern "C" __declspec(dllexport) ICorJitCompiler* __stdcall getJit()
 {
 	LogEnteredFuncDebug(__func__);
 
+	if (!g_getJitEx)
+	{
+		g_getJitEx = (getJitEx)GetProcAddress(LoadLibraryW(L"r_clrjit.dll"), "getJit");
+		g_jitStartupEx = (jitStartupEx)GetProcAddress(LoadLibraryW(L"r_clrjit.dll"), "jitStartup");
+	}
+
 	jit = new ElectronJit();
 	jit->p_jit = g_getJitEx();
 	return jit;

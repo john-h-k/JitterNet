@@ -10,16 +10,26 @@ extern jitStartupEx g_jitStartupEx;
 class ElectronJit : public ICorJitCompiler  // NOLINT(hicpp-special-member-functions)
 {
 public:
-	virtual ~ElectronJit() = default;
+	ElectronJit();
 
-	CorJitResult __stdcall compileMethod(ICorJitInfo* comp, CORINFO_METHOD_INFO* info, unsigned flags,
-		BYTE** nativeEntry, ULONG* nativeSizeOfCode);
-	void clearCache();
-	BOOL isCacheCleanupRequired();
-	void getVersionIdentifier(GUID* versionIdentifier);
+	CorJitResult __stdcall compileMethod(ICorJitInfo*         comp,            /* IN */
+		CORINFO_METHOD_INFO* methodInfo,      /* IN */
+		unsigned             flags,           /* IN */
+		BYTE**               nativeEntry,     /* OUT */
+		ULONG*               nativeSizeOfCode /* OUT */
+	);
 
-	void ProcessShutdownWork(ICorStaticInfo* info) override;
+	void clearCache(void);
+	BOOL isCacheCleanupRequired(void);
+
+	void ProcessShutdownWork(ICorStaticInfo* statInfo);
+
+	void getVersionIdentifier(GUID* versionIdentifier /* OUT */
+	);
+
 	unsigned getMaxIntrinsicSIMDVectorLength(CORJIT_FLAGS cpuCompileFlags);
+
 	void setRealJit(ICorJitCompiler* realJitCompiler);
-	ICorJitCompiler* p_jit;	
+
+	ICorJitCompiler* p_jit;
 };

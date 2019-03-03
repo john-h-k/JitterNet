@@ -16,6 +16,11 @@ const GUID version =
 getJitEx g_getJitEx;
 jitStartupEx g_jitStartupEx;
 
+ElectronJit::ElectronJit()
+{
+	p_jit = nullptr;
+}
+
 CorJitResult ElectronJit::compileMethod(ICorJitInfo* comp, CORINFO_METHOD_INFO* info, unsigned flags,
 	BYTE** nativeEntry, ULONG* nativeSizeOfCode)
 {
@@ -56,11 +61,6 @@ void ElectronJit::getVersionIdentifier(GUID* versionIdentifier)
 	memcpy(versionIdentifier, &version, sizeof(GUID));
 }
 
-void ElectronJit::ProcessShutdownWork(ICorStaticInfo* info)
-{
-	p_jit->ProcessShutdownWork(info);
-}
-
 unsigned ElectronJit::getMaxIntrinsicSIMDVectorLength(CORJIT_FLAGS cpuCompileFlags)
 {
 	return p_jit->getMaxIntrinsicSIMDVectorLength(cpuCompileFlags);
@@ -70,3 +70,18 @@ void ElectronJit::setRealJit(ICorJitCompiler* realJitCompiler)
 {
 	p_jit->setRealJit(realJitCompiler);
 }
+
+void ElectronJit::ProcessShutdownWork(ICorStaticInfo* info)
+{
+	p_jit->ProcessShutdownWork(info);
+}
+
+//unsigned ElectronJit::getMaxIntrinsicSIMDVectorLength(CORJIT_FLAGS cpuCompileFlags)
+//{
+//	return p_jit->getMaxIntrinsicSIMDVectorLength(cpuCompileFlags);
+//}
+//
+//void ElectronJit::setRealJit(ICorJitCompiler* realJitCompiler)
+//{
+//	p_jit->setRealJit(realJitCompiler);
+//}
